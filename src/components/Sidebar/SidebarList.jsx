@@ -1,9 +1,13 @@
-import { menu } from "./menu";
+import { menu, menu2 } from "./menu";
 import { Link } from "react-router-dom";
 import { Navbar, Container, Nav } from "react-bootstrap";
-import React from "react";
+import { CompanyContext } from "../../context/companyContext";
+import React, { useContext, useEffect } from "react";
 
 export const SidebarList = () => {
+  const { company } = useContext(CompanyContext);
+  const { type } = company;
+  const list = type === "company" ? menu : menu2;
   return (
     <Container>
       <Navbar.Brand>
@@ -12,7 +16,7 @@ export const SidebarList = () => {
         </Link>
       </Navbar.Brand>
       <Nav className="flex-collumn gap-2" defaultActiveKey="/dashboard">
-        {menu.map((item, index) => {
+        {list.map((item, index) => {
           return (
             <Nav.Item key={index}>
               <Link className="nav-link text-white" to={item.path}>

@@ -12,17 +12,32 @@ import { openAction } from "../../stores/listStores";
 
 const List = () => {
   const [list, setList] = useState([]);
-  const { dispatchList } = useContext(CompanyContext);
+  const { dispatchList, company, refetch, setRefetch } =
+    useContext(CompanyContext);
+
+  const { type } = company;
 
   useEffect(() => {
-    getAllAppointment().then((res) => {
+    if (refetch) {
+      getAllAppointment(type)
+        .then((res) => {
+          setList(res);
+        })
+        .finally(() => {
+          setRefetch(false);
+        });
+    }
+  }, [refetch]);
+
+  useEffect(() => {
+    document.title = "List Appointment";
+    getAllAppointment(type).then((res) => {
       setList(res);
     });
   }, []);
 
   const handleOpen = async (id) => {
-    const data = await getAppointmentById(id);
-    console.log(data);
+    const data = await getAppointmentById(type, id);
     dispatchList(openAction(data));
   };
 
@@ -51,10 +66,11 @@ const List = () => {
                 </td>
                 <td>{v.vendor}</td>
                 <td>
-                  {v.confirmed_date ??
-                    v.proposed_date.map((val) => (
-                      <div key={val}>{convertToLocale(val)}</div>
-                    ))}
+                  {v.confirmed_date
+                    ? convertToLocale(v.confirmed_date)
+                    : v.proposed_date.map((val) => (
+                        <div key={val}>{convertToLocale(val)}</div>
+                      ))}
                 </td>
                 <td>{getStatus(v.status)}</td>
                 <td>{convertToLocale(v.date_created)}</td>

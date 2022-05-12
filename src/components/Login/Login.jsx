@@ -26,9 +26,11 @@ const Login = () => {
     document.title = title;
   }, [loginType]);
 
-  if (company.isLoggedIn) {
-    navigate("/dashboard");
-  }
+  useEffect(() => {
+    if (company.isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [company.isLoggedIn]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

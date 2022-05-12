@@ -29,8 +29,8 @@ export async function getAllVendor() {
 }
 
 //Get All Appointment
-export async function getAllAppointment() {
-  const server = `${SERVER}/company/appointment`;
+export async function getAllAppointment(type) {
+  const server = `${SERVER}/${type}/appointment`;
   const token = getToken();
   const response = await axios.get(server, {
     headers: {
@@ -41,8 +41,8 @@ export async function getAllAppointment() {
 }
 
 //Get Appointment by ID
-export async function getAppointmentById(id) {
-  const server = `${SERVER}/company/appointment/${id}`;
+export async function getAppointmentById(type, id) {
+  const server = `${SERVER}/${type}/appointment/${id}`;
   const token = getToken();
   const response = await axios.get(server, {
     headers: {
@@ -72,8 +72,45 @@ export async function createAppointment(data = {}) {
   return response.data;
 }
 
+//Confirm Appointment
+export async function confirmAppointment(id, date) {
+  const server = `${SERVER}/vendor/appointment/${id}/confirm`;
+  const token = getToken();
+  const formattedDate = convertDate(date);
+  const response = await axios.put(
+    server,
+    {
+      date: date,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+}
+
+//Reject Appointment
+export async function rejectAppointment(id, remarks) {
+  const server = `${SERVER}/vendor/appointment/${id}/reject`;
+  const token = getToken();
+  const response = await axios.put(
+    server,
+    {
+      remarks: remarks,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+}
+
 //Convert YYYY-MM-DD to JS Date
-function convertDate(date) {
+export function convertDate(date) {
   const dateArray = date.split("-");
   const newDate = new Date(
     parseInt(dateArray[0]),

@@ -1,79 +1,63 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Modal, Button, Table } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { CompanyContext } from "../../context/companyContext";
-import { openAction, closeAction } from "../../stores/listStores";
-import { convertToLocale, getStatus } from "../../lib/helper";
+import { closeAction } from "../../stores/listStores";
+import Confirm from "./Confirm";
+import Reject from "./Reject";
+import ListTable from "./Table";
 
 export default function ListModal() {
-  const { list, dispatchList, company } = useContext(CompanyContext);
+  const [showState, setShowState] = useState(1);
+  const { list, dispatchList, company, setRefetch } =
+    useContext(CompanyContext);
   const { isOpen, data } = list;
-  const handleClose = () => dispatchList(closeAction());
+  const handleClose = () => {
+    setShowState(1);
+    dispatchList(closeAction());
+    setRefetch(true);
+  };
+
+  const switchBodyView = () => {
+    switch (showState) {
+      case 1:
+        return <ListTable data={data} />;
+      case 2:
+        return <Confirm data={data} close={handleClose} />;
+      case 3:
+        return <Reject data={data} close={handleClose} />;
+      default:
+        return <ListTable data={data} />;
+    }
+  };
+
+  const openConfirm = () => {
+    setShowState(2);
+  };
+
+  const openReject = () => {
+    setShowState(3);
+  };
+
   return (
     <>
       <Modal show={isOpen} onHide={handleClose} size={"lg"} centered>
         <Modal.Header closeButton>
           <Modal.Title>Event Details</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Table>
-            <tbody>
-              <tr>
-                <th>Event Name</th>
-                <td>
-                  <span className="fw-bold">{data.event_name}</span>
-                </td>
-              </tr>
-              <tr>
-                <th>Vendor</th>
-                <td>{data.vendor}</td>
-              </tr>
-              <tr>
-                <th>Event Status</th>
-                <td>{getStatus(data.status)}</td>
-              </tr>
-              {data.status === "confirmed" && (
-                <tr>
-                  <th>Confirmed Date</th>
-                  <td>{convertToLocale(data.confirmed_date)}</td>
-                </tr>
-              )}
-              {data.status === "pending" && (
-                <tr>
-                  <th>Proposed Date</th>
-                  <td>
-                    {data.proposed_date.map((v) => (
-                      <span key={v}>
-                        {convertToLocale(v)}
-                        <br />
-                      </span>
-                    ))}
-                  </td>
-                </tr>
-              )}
-              <tr>
-                <th>Location</th>
-                <td>{data.proposed_location}</td>
-              </tr>
-              {data.status === "rejected" && (
-                <tr>
-                  <th>Rejected Reason</th>
-                  <td>{data.remarks}</td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-        </Modal.Body>
-        {company.type === "vendor" && (
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        )}
+        <Modal.Body>{switchBodyView()}</Modal.Body>
+        {company.type === "vendor" &&
+          data.status === "pending" &&
+          showState === 1 && (
+            <Modal.Footer>
+              <Button variant="primary" onClick={openConfirm}>
+                Confirm
+              </Button>
+              <Button variant="danger" onClick={openReject}>
+                Reject
+              </Button>
+            </Modal.Footer>
+          )}
       </Modal>
     </>
   );

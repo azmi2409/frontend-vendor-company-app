@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import { companyStores, initialState } from "../stores/companyStores";
 import { loginAction } from "../stores/companyStores";
 import listStores from "../stores/listStores";
@@ -9,6 +9,7 @@ export const CompanyContext = createContext();
 export const CompanyProvider = ({ children }) => {
   const [company, dispatch] = useReducer(companyStores, initialState);
   const [list, dispatchList] = useReducer(listStores, listState);
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("token")) || "";
@@ -25,6 +26,8 @@ export const CompanyProvider = ({ children }) => {
         dispatch,
         list,
         dispatchList,
+        refetch,
+        setRefetch,
       }}
     >
       {children}

@@ -24,3 +24,21 @@ export const menu = [
     path: "/logout",
   },
 ];
+
+export const menu2 = [
+  {
+    title: "Dashboard",
+    icon: AiFillDashboard,
+    path: "/",
+  },
+  {
+    title: "List Events",
+    icon: FaList,
+    path: "/list",
+  },
+  {
+    title: "Logout",
+    icon: BiLogOut,
+    path: "/logout",
+  },
+];

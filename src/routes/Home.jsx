@@ -1,8 +1,12 @@
-import React from "react";
+import { useEffect } from "react";
 import HomeComponent from "../components/Home";
+import { Navigate } from "react-router-dom";
 
 const Home = () => {
-  return <HomeComponent />;
+  useEffect(() => {
+    document.title = "Home My EMS";
+  }, []);
+  return <Navigate to="/list" />;
 };
 
 export default Home;
