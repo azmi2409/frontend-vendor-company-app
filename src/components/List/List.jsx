@@ -1,5 +1,5 @@
 import { Col, Table } from "react-bootstrap";
-import { tableHead } from "./TableHead";
+import { tableHead } from "./tableHead";
 import { useState, useEffect, useContext } from "react";
 import {
   getAllAppointment,
