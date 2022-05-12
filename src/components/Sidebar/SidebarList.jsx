@@ -15,7 +15,10 @@ export const SidebarList = () => {
           <h1 className="text-white fw-bold fs-2">My EMS</h1>
         </Link>
       </Navbar.Brand>
-      <Nav className="flex-collumn gap-2" defaultActiveKey="/dashboard">
+      <Nav
+        className="flex-row flex-md-collumn gap-2"
+        defaultActiveKey="/dashboard"
+      >
         {list.map((item, index) => {
           return (
             <Nav.Item key={index}>
