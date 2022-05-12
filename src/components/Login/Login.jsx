@@ -28,7 +28,7 @@ const Login = () => {
 
   useEffect(() => {
     if (company.isLoggedIn) {
-      navigate("/dashboard");
+      navigate("/");
     }
   }, [company.isLoggedIn]);
 
