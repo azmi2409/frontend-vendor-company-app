@@ -48,6 +48,10 @@ const ListTable = ({ data }) => {
             <td>{data.remarks}</td>
           </tr>
         )}
+        <tr>
+          <th>Date Created</th>
+          <td>{convertToLocale(data.date_created)}</td>
+        </tr>
       </tbody>
     </Table>
   );
