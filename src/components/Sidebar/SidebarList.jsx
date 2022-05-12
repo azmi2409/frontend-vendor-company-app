@@ -2,14 +2,14 @@ import { menu, menu2 } from "./menu";
 import { Link } from "react-router-dom";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { CompanyContext } from "../../context/companyContext";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 
 export const SidebarList = () => {
   const { company } = useContext(CompanyContext);
   const { type } = company;
   const list = type === "company" ? menu : menu2;
   return (
-    <Container>
+    <Container className="d-none d-md-block vh-100">
       <Navbar.Brand>
         <Link to="/">
           <h1 className="text-white fw-bold fs-2">My EMS</h1>
